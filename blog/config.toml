@@ -1,0 +1,5 @@
+baseURL = "http://leobugeja.com/"
+languageCode = "en-gb"
+title = "Leo's blog"
+theme = "ananke"
+min_version = "0.84.0"
