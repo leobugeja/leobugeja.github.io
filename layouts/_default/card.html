@@ -1,0 +1,29 @@
+<a href="{{ .Permalink }}" class="card-anchor" id="card">
+	<div class="card-content">
+		<div class="card-imagecontainer">
+			<img src="{{ .Page.Params.thumbnail }}" class="card-image">
+		</div>
+
+		<div class="card-textcontainer"> 
+			<table style="height: 100%; border-spacing: 0px;">
+				<tr style="height: 0px; border-spacing: 0px;">
+					<td valign="top" style="padding: 0px">
+						<div class="card-title">
+							{{ .Title }}
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td valign="bottom" style="padding-top: 4px;">
+						{{ partial "card_date.html" . }}
+					</td>
+				</tr>
+			</table>
+
+			<!-- <div class="card-title">
+				{{ .Title }}
+			</div>
+			{{ partial "card_date.html" . }} -->
+		</div>
+	</div>
+</a>

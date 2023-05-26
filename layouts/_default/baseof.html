@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Roboto:400,500,600,700,400italic,500italic,600italic?family=Roboto+Mono">
+		<link rel="apple-touch-icon" sizes="180x180" href="/icons/favicon/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon/favicon-16x16.png">
+		<link rel="shortcut icon" href="/icons/favicon/favicon.ico">
+		<link rel="manifest" href="/icons/favicon/site.webmanifest">
+		
+		<link rel="stylesheet" href="/css/styles.css">
+
+		<script src="/js/card_date.js" type="text/javascript"></script>
+		<script defer src="/js/footer.js" type="text/javascript"></script>
+
+		<title>{{ .Site.Title }}</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	</head>
+
+	<body class="body-style">
+	
+		<nav class="navbar">
+			<a class="home-anchor" href="/">
+				<!-- <img src="icons/home_icon.svg" class="home-icon"/> -->
+				<span class="navbar-logo">
+					<span class="navbar-chars-l">
+						L
+					</span><span class="navbar-chars-e">
+						e
+					</span><span class="navbar-chars-o">
+						o
+					</span><span class="navbar-chars-period">
+						.
+					</span><span class="navbar-chars-b">
+						B
+					</span>
+				</span>
+			</a>
+		</nav>
+
+		{{ block "main" . }}{{ end }}
+
+		<footer>
+			<div class="footer-div">
+				<div class="footer-logodiv">
+					<a href="/" class="footer-logo">Leo.B</a>
+				</div>
+				{{ partial "socialicons.html" .}}
+				<span class="footer-copyright">© 2023 Leo Bugeja</span>		
+			</div>
+		</footer>
+
+	</body>
+</html>

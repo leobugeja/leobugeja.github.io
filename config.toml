@@ -1,5 +1,16 @@
 baseURL = "https://leobugeja.com"
 languageCode = "en-gb"
 title = "Leo's blog"
-theme = "ananke"
 min_version = "0.84.0"
+[permalinks]
+	posts = "/:slug/"
+
+[markup.highlight]
+	codeFences = true
+	guessSyntax = false
+	lineNos = false
+	lineNumbersInTable = false
+	noClasses = true
+	tabWidth = 4
+	style = "friendly" # monokailight, friendly, emacs, tango, manni
+	hl_inline = true

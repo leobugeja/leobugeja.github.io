@@ -1,0 +1,19 @@
+{{ define "main" }}
+<main class="article-main">
+	<h1>{{ .Title }}</h1>
+	<div class="article-datediv">
+		<span class="article-date">{{ .Date.Format "Jan 2, 2006" }}</span>
+	</div>
+
+	{{/*  <h2>{{ .Page.Params.subtitle }}</h2>  */}}
+
+	<div class="article-imagecontainer">
+		<img src="{{ .Page.Params.headerimage }}" class="card-image">
+	</div>
+
+	<article>
+		{{ .Content }}
+	</article>
+
+</main>
+{{ end }}
