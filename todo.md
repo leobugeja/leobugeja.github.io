@@ -6,6 +6,8 @@
 ~~ youtube video embedding ~~
 ~~ link/shortcode ref in content~~
 
+- fix code block formatting
+- don't move logo on mobile
 - create js graphs
 https://stackoverflow.com/questions/68631574/hugo-js-assets-for-single-pages-or-sections
 https://www.chartjs.org/docs/latest/getting-started/
@@ -23,6 +25,7 @@ https://www.chartjs.org/docs/latest/getting-started/
 - investigate viewership analytics
 - privacy declaration?
 
+- Add README
 - Create custom highlighter style colors for code blocks https://davelage.com/posts/chroma-highlight/
 
 - remove the sup shortcode
