@@ -5,8 +5,8 @@
 ~~ citation footer formatting (make header Refereces and remove horizontal line) ~~
 ~~ youtube video embedding ~~
 ~~ link/shortcode ref in content~~
+~~ fix code block formatting ~~
 
-- fix code block formatting
 - don't move logo on mobile
 - create js graphs
 https://stackoverflow.com/questions/68631574/hugo-js-assets-for-single-pages-or-sections
@@ -28,6 +28,7 @@ https://www.chartjs.org/docs/latest/getting-started/
 - Add README
 - Create custom highlighter style colors for code blocks https://davelage.com/posts/chroma-highlight/
 
+- reduce size of letters in logo icon
 - remove the sup shortcode
 - check reliability of reference list item highlighting
 
