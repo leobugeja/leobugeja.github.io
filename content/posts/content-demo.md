@@ -22,7 +22,7 @@ Take the following [link]({{< ref "healthy-eating.md" >}}) to a blog article abo
 
 
 ### C++ Code Block
-```cpp
+{{< highlight cpp >}}
 #include <iostream>
 
 int calculateSquare(int num) {
@@ -36,7 +36,7 @@ int main() {
     std::cout << "Square of " << number << " is: " << result << std::endl;
     return 0;
 }
-```
+{{< / highlight >}}
 
 ### Python Code Block Which Overflows
 ```python
