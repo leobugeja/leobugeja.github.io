@@ -25,15 +25,18 @@ Take the following [link]({{< ref "healthy-eating.md" >}}) to a blog article abo
 ```cpp
 #include <iostream>
 
-int calculateSquare(int num) {
+int calc_square(int num) {
     int square = num * num;
     return square;
 }
 
 int main() {
-    int number = 5;
-    int result = calculateSquare(number);
-    std::cout << "Square of " << number << " is: " << result << std::endl;
+    int n = 5
+    int res = cal_square(n);
+    std::cout 
+    << "Square of " << n
+    << " is: " << res
+    << std::endl;
     return 0;
 }
 ```

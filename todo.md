@@ -6,8 +6,11 @@
 ~~ youtube video embedding ~~
 ~~ link/shortcode ref in content~~
 ~~ fix code block formatting ~~
+~~ don't move logo on mobile ~~
 
-- don't move logo on mobile
+- sort out authentication warning when pushing
+- reduce font size for mobile sized screens
+- on mobile fix overlap of inline code padding
 - create js graphs
 https://stackoverflow.com/questions/68631574/hugo-js-assets-for-single-pages-or-sections
 https://www.chartjs.org/docs/latest/getting-started/
