@@ -7,13 +7,14 @@
 ~~ link/shortcode ref in content~~
 ~~ fix code block formatting ~~
 ~~ don't move logo on mobile ~~
-
+~~ reduce font size for mobile sized screens ~~
+~~ on mobile fix overlap of inline code padding ~~ 
+~~ fix sup tag affectting line spacing ~~
+~~ play with chart.js and d3 ~~
 - sort out authentication warning when pushing
-- reduce font size for mobile sized screens
-- on mobile fix overlap of inline code padding
-- create js graphs
-https://stackoverflow.com/questions/68631574/hugo-js-assets-for-single-pages-or-sections
-https://www.chartjs.org/docs/latest/getting-started/
+
+# Charts
+- 
 
 - Remake card images with stable diffusion (altern city image so bottm corners are rounded)
 - Resize Logo for different widths?
@@ -30,13 +31,18 @@ https://www.chartjs.org/docs/latest/getting-started/
 
 - Add README
 - Create custom highlighter style colors for code blocks https://davelage.com/posts/chroma-highlight/
+- Custom color scheme for chart.js https://github.com/nagix/chartjs-plugin-colorschemes
 
-- reduce size of letters in logo icon
+- reduce size of letters in logo icon for different screen widths?
 - remove the sup shortcode
 - check reliability of reference list item highlighting
 
+- enable people to load file and plot chart based on the data https://developer.mozilla.org/en-US/docs/Web/API/FileReader
 
+- Hugo pipes? https://gohugo.io/hugo-pipes/js/#import-js-code-from-assets
+- tree shaking to reduce size of the pages
 - tables
 - 2D/3D Graphics 
 - highlight superscript reference when returning back from a reference: https://danielpost.com/articles/making-hugos-footnotes-accessible. Make cursor not appear aswell?#
 - code blocks include the code language at the top (and possibly a copy code button)
+- make site accessible e.g using aria-label

@@ -14,9 +14,17 @@ This sentence contains a link to [bbc news](https://www.bbc.co.uk/news) which is
 
 I am making a statement about the earths circumference[^earths circum] and this is the end of the sentence.
 
-Take the following [link]({{< ref "healthy-eating.md" >}}) to a blog article about healthy eating.
+Take the following [link]({{< ref "23-05-17-healthy-eating.md" >}}) to a blog article about healthy eating.
 
 [^earths circum]: https://en.wikipedia.org/wiki/Earth
+
+## Chart.js Bar Chart
+
+{{< chartjs id="myChart" js="../js/chartjs_bar_chart.js" >}}
+
+## D3.js Heatmap
+
+{{< d3-heatmap >}}
 
 ## Code
 

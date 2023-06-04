@@ -1,6 +1,7 @@
 /* || Base */
 
 :root {
+	font-size: 22px;
 	--content-width: 1000px;
 	--post-width: 800px;
 	--filter-normal: opacity(0.5); 
@@ -404,6 +405,13 @@ iframe {
 	border-radius: 10px;
 }
 
+sup {
+	font-size: 0.7em;
+	vertical-align: top;
+	position: relative;
+	top: -0.5em;
+}
+
 sup > * {
 	text-decoration: none;
 }
@@ -456,11 +464,11 @@ sup > * {
 
 code {
 	background-color: #f0f0f0;
-	padding: 0.25rem 0.4rem;
+	padding: 0.2rem 0.4rem;
 	border-radius: 8px;
 	white-space: break-spaces;
 	font-family: 'Roboto Mono', monospace;
-	font-size: 1.1rem;
+	font-size: 0.8rem;
 }
 
 .highlight div,
@@ -502,6 +510,7 @@ code {
 /* Single column cards */
 @media screen and (max-width: 600px) {
 	:root {
+		font-size: 17px;
 		--homepage-title-header-width: calc(100vw - 2*var(--side-padding));
 		--side-padding: calc(5vw);
 	}
@@ -509,7 +518,7 @@ code {
 	h1 { font-size: 40px; }
 	h2 { font-size: 31px; }
 	h3 { font-size: 24px; }
-	p { font-size: 18px; }
+	p { font-size: 17px; }
 	.article-date { font-size: 16px; }
 
 	.homepage-header {
