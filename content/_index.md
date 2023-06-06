@@ -1,5 +1,7 @@
 ---
-title: "A Blog About Important Stuff"
-subtitle: "This contains things such as computing"
+title: "Hello, I'm \n Leo Bugeja"
+subtitle: "> Software Engineer\n
+           > Data Enthusiast\n
+           > Passionate learner"
 
 ---

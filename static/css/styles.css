@@ -36,7 +36,7 @@ h1 {
 
 h2 {
 	margin-top: 1.4em;
-	margin-bottom: 0.4em;
+	margin-bottom: 0.6em;
 	font-weight: 500;
 	font-size: 38px;
 }
@@ -45,7 +45,7 @@ h3 {
 	margin-top: 1em;
 	margin-bottom: 0px;
 	font-weight: 500;
-	font-size: 30px;
+	font-size: 28px;
 }
 
 p {
@@ -166,20 +166,22 @@ a:visited {
 }
 
 .homepage-maintitle {
-	margin-top: 20px;
+	margin-top: calc(var(--homepage-title-header-width)*0.05);
 	font-weight: bold;
-	font-size: calc(var(--homepage-title-header-width)*0.15);
+	font-size: calc(var(--homepage-title-header-width)*0.18);
 	animation: fadeIn calc(1.5*var(--homepage-fadein-time)), slideIn 1.5s;
 }
 
 .homepage-subtitle {
-	margin-top: 15px;
+	margin-top: calc(var(--homepage-title-header-width)*0.09);
 	margin-bottom: 20px;
-	font-size: calc(var(--homepage-title-header-width)*0.1);
+	font-size: calc(var(--homepage-title-header-width)*0.09);
 	animation: fadeIn calc(1.5*var(--homepage-fadein-time)), slideIn 1.5s;
 	animation-delay: 0.3s;
 	opacity: 0;
 	animation-fill-mode: forwards, none;
+	white-space: pre-line;
+	line-height: 1.3em;
 }
 
 .homepage-profilediv {
@@ -194,7 +196,7 @@ a:visited {
 }
 
 .homepage-cardheader {
-	font-size: calc(var(--homepage-title-header-width)*0.08);
+	font-size: calc(var(--homepage-title-header-width)*0.1);
 	font-weight: 500; 
 	padding-left: 2px;
 	padding-bottom: 25px;
@@ -464,7 +466,7 @@ sup > * {
 
 code {
 	background-color: #f0f0f0;
-	padding: 0.2rem 0.4rem;
+	padding: 0.16rem 0.4rem 0.22rem 0.4rem;
 	border-radius: 8px;
 	white-space: break-spaces;
 	font-family: 'Roboto Mono', monospace;
@@ -473,7 +475,7 @@ code {
 
 .highlight div,
 .highlight pre {
-	padding: 1.5rem 1.5rem;
+	padding: 1em;
 	border-radius: 10px;
 	font-size: 1rem;
 	overflow-x: overlay;
@@ -487,6 +489,7 @@ code {
 
 .highlight code span { 
 	font-family: 'Roboto Mono', monospace; /* TODO: fix being able to include with above block*/
+	line-height: 1.4em;
 }
 
 .chroma * {
@@ -494,13 +497,13 @@ code {
 }
 
 .highlight pre::-webkit-scrollbar {
-	height:  1.2rem;
+	height:  1em;
 }
 
 .highlight pre::-webkit-scrollbar-thumb {
 	background-color: lightgrey;
-	border-radius: 10px;
-	border: 5px solid rgba(0, 0, 0, 0);
+	border-radius: 1em;
+	border: 0.28em solid rgba(0, 0, 0, 0);
 	background-clip: padding-box;
 }
 
@@ -517,7 +520,7 @@ code {
 
 	h1 { font-size: 40px; }
 	h2 { font-size: 31px; }
-	h3 { font-size: 24px; }
+	h3 { font-size: 23px; }
 	p { font-size: 17px; }
 	.article-date { font-size: 16px; }
 

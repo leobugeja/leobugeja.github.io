@@ -7,7 +7,7 @@ thumbnail: /images/house_plants_trans.png
 headerimage: /images/house_plants_trans_cropped.png
 ---
 
-\* THIS ARTICLE HAS BEEN WRITTEN BY AI  AND IS FOR DEMONSTRATIVE PURPOSES ONLY \*
+\* THIS ARTICLE HAS BEEN WRITTEN BY AI  AND IS FOR DEMONSTRATIVE PURPOSES ONLY INCLUDING THE PUBLISH DATE \*
 
 In our fast-paced and technology-driven world, it's easy to feel disconnected from nature. But there's a simple and delightful way to bring a touch of the outdoors into your home: house plants. These green companions not only add beauty to your living space but also offer a myriad of benefits. Let's explore the magic of house plants and why they deserve a special place in every home.
 

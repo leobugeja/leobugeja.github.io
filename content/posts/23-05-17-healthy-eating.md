@@ -5,7 +5,7 @@ slug: healthy-eating
 thumbnail: /images/healthy_eating_trans.png
 headerimage: /images/healthy_eating_trans_cropped.png
 ---
-\* THIS ARTICLE HAS BEEN WRITTEN BY AI AND IS FOR DEMONSTRATIVE PURPOSES ONLY \*
+\* THIS ARTICLE HAS BEEN WRITTEN BY AI AND IS FOR DEMONSTRATIVE PURPOSES ONLY INCLUDING THE PUBLISH DATE\*
 
 In today's fast-paced world, it's easy to neglect our dietary habits and opt for convenient but unhealthy food choices. However, the importance of healthy eating cannot be overstated. A nutritious diet plays a crucial role in nourishing our bodies, boosting our immune systems, and promoting overall well-being.
 

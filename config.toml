@@ -1,7 +1,7 @@
 baseURL = "https://leobugeja.com"
 languageCode = "en-gb"
 title = "Leo's blog"
-min_version = "0.84.0"
+min_version = "0.112.7"
 [permalinks]
 	posts = "/:slug/"
 [markup]
