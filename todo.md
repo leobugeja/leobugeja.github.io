@@ -15,12 +15,14 @@
 ~~ fix discrepancy between local and remote ~~
 ~~ create content for fake blog articles ~~
 ~~ add personal email for blog ~~
+~~ Create blog title and sub-title ~~
+~~- fine tune spacing between title and profile picture (mainly on web) ~~
+~~ crop corners of city image ~~
+
 
 # P1
-- Create blog title and sub-title
-- fine tune spacing between title and profile picture (mainly on web)
+
 - investigate viewership analytics
-- crop corners of city image
 
 # P2
 - Remake card images with stable diffusion (altern city image so bottom corners are rounded)
