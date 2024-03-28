@@ -36,8 +36,10 @@ The circumference of the Earth is the distance around its equator, measuring app
 ### D3.js Heatmap
 {{< d3-heatmap >}}
 
-### Calorie Distribution Heatmap
+### Highcharts.js Heatmap
 {{< calorie-distribution >}}
+
+### Highcharts.js Heatmap 2
 
 
 ## Code
