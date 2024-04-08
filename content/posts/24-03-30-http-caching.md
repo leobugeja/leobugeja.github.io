@@ -48,9 +48,12 @@ The `max-age` value specifies the duration in seconds for which the response wil
 Cache-Control: max-age=3600
 ```
 
-TODO: Why does the freshness information bee needed?
+The second part of the specification states that the `Content-Location` must match the Request-URI indicating that the response body is a resource representation. The `Content-Location` is a header in the response which refers to the location of the created/updated resource.
 
-The second part of the specification states that the `Content-Location` must match the Request-URI, indicating that the response body is a resource representation. First of all, the `Content-Location` is a header in the response which refers to the location of the created/updated resource and indicates that the body will contain the new resource. A response to a POST request creating a new resource could look like the following example:
+What is meant by the response body being a resource representation is that the contents of the response is what would be returned if a GET request was made to that location. Therefore this response body can be cached against the `Content-Location` to satisfy future requests.
+
+A response to a POST request creating a new resource could look like the following example:
+
 ```HTTP
 HTTP/1.1 201 Created
 Content-Location: /my-new-resource
@@ -60,26 +63,36 @@ Content-Type: application/json
     "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
 }
 ```
-TODO: what is meant that the response body is a resource representation. Why does this need to be the case
 
-The response body is then cached against the `Content-Location` to satisfy future requests. The `Content-Location` must match the Request-URI to prevent the security risk of a response from a mulit-tenant server poisoning the cache of a resource belonging to another owner. In most cases a PUT or POST request’s response isn’t a representation of its URI and so for the majority of the time POST or PUT wouldn't get cached.
+It is important that the `Content-Location` must match the Request-URI (uri vs url, calipitalize Request?) to prevent a security risk of a response from a multi-tenant server poisoning the cache of a resource belonging to another owner.
 
+Often resources that are created or modified by a POST request are located in a different location than the Request-URI. This prevents the response from being cached in many cases.
 
-## How is a Cached POST and PATCH Response Used?
+## How is the Cached Response Used?
 
-A cached POST or PATCH response will **only** be used for subsequent GET (or HEAD) requests and notibly not another POST or PATCH. The reason that future POST or PATCH requests cannot use the previously cached response is that these methods are potentially ‘unsafe’ and non-idempotent which means that the request must always be ‘written’ through to the server. In contrast, GET is safe and idempotent so assuming the target resource doesn’t change between making the next request or that having the most uptodate version isn’t necessary, then using the cached response may makes sense.
+When a POST or PATCH response is cached, it can **only** be used for subsequent GET or HEAD requests and not for subsequent POST or PATCH requests. A GET request with the same path as the cached response in `Content-Location` will use the cached resource provided it is still fresh and that the request doesn't have the `no-cache` directive.
+
+```HTTP
+Cache-Control: no-cache
+```
+
+POST and PATCH requests cannot use cached resources because these methods are unsafe and non-idempotent. This means that the request must always be sent to the server to ensure that modifications are applied. This is in contrast to GET which is a safe and idempotent method. Therefore, assuming that the target resource has not changed since it was cached, there is no need to request the resource from the server.
 
 ## Why is PUT not cacheable?
 
-On the surface, PUT seems a better canditate for caching compared to POST and PATCH. It is an idempotent operation, the request contains the contents of the resource and the target URI directly identifies the resource. However, the server can modify the content sent and so the request body may not be what gets stored on the server and there’d also need to be signal from the server to indicate that the request body can be used to cache future GETs or PUTs. Additionally caches betweent the client and server would need to change implementation to buffer PUT request bodies with the chance that a response is received telling it to cache and it needs the response body to form the cache. Therefore the above points make it challenging to implement.
+Like the POST and PATCH methods, PUT is unsafe. This means that it must always send the request to the origin server. However, there is still the question of why a PUT response couldn't be used to satisfy a future GET request to the same resource, as implemented for POST and PATCH responses.
 
-An alternative implementation of HTTP could include the resultant target resouce in the PUT response that could get cached but this consumes extra bandwidth.
+The most obvious reason is that PUT responses do not return a representation of the resource in the response body (though this could be added to the spec). Alternatively, the **request** body seems like it could be cached as a representation of the resource. However, the server can modify the contents sent by a PUT request, so the request body may not be an accurate representation of the resource.
 
+While PUT responses are not cacheable, a successful PUT request will invalidate existing cached resources for the same target URI.[^e] This means that when a subsequent GET request is made for the same target URI, it will have to be sent to the server to retrieve the newly modified resource.
 
-In summary, a PUT or PATCH response which contains freshness information and Content-Location equal to its URI will end up being cached and the cached response will only be used for future GET or HEAD requests.
+## Summary
+
+To summarize, when a POST or PATCH response includes freshness information and `Content-Location` that matches its URI, it will be cached. However, these cached responses can only be used for future GET or HEAD requests. Lastly though the PUT method is not cacheable, it can still invalidate other cached responses.
 
 [^a]: https://www.rfc-editor.org/rfc/rfc5789#section-2
 [^b]: https://www.rfc-editor.org/rfc/rfc9110#section-9.3
 [^c]: https://www.rfc-editor.org/rfc/rfc9111#section-4.2
 [^d]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control
+[^e]: https://www.rfc-editor.org/rfc/rfc9110#section-9.3.4
 

@@ -62,7 +62,7 @@ p {
 }
 
 a {
-	color: #437ba0;
+	color: rgb(51, 102, 204);
 	text-decoration: none;
 }
 
@@ -71,7 +71,7 @@ a:hover {
 }
 
 a:visited {
-	color: purple;
+	color: rgb(107, 75, 161);
 }
 
 .homepage-main {
@@ -509,7 +509,7 @@ sup {
 
 code {
 	background-color: rgb(226, 226, 226);
-	padding: 0.15rem 0.3rem 0.2rem 0.3rem;
+	padding: 0.14rem 0.3rem 0.18rem 0.3rem;
 	border-radius: 8px;
 	white-space: break-spaces;
 	font-family: 'Roboto Mono', monospace;
@@ -545,7 +545,7 @@ pre code:before {
 	display: block;
 	content: attr(data-lang);
 	margin-top: -1.6em;
-	color: lightslategray;
+	color: rgb(160, 160, 160);
 	text-transform: uppercase;
 	font-weight: bold;
 	position: absolute;
