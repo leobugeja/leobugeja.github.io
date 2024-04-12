@@ -229,8 +229,8 @@ button:active {
 	font-weight: 500; 
 	padding-left: 2px;
 	padding-bottom: 25px;
-	animation: fadeIn calc(1.5*var(--homepage-fadein-time));
-	animation-delay: 0.6s;
+	animation: fadeIn calc(2*var(--homepage-fadein-time));
+	animation-delay: 0.2s;
 	opacity: 0;
 	animation-fill-mode: forwards, none;
 }
@@ -240,7 +240,10 @@ button:active {
 	column-gap: var(--card-column-gap);
 	row-gap: var(--card-row-gap);
 	grid-template-columns: repeat(1, 1fr);
-	animation: fadeIn var(--homepage-fadein-time);
+	animation: fadeIn calc(2*var(--homepage-fadein-time));
+	animation-delay: 0.2s;
+	opacity: 0;
+	animation-fill-mode: forwards, none;
 }	
 
 /*.card-container::after {
@@ -351,11 +354,12 @@ button:active {
 
 .article-imagecontainer {
 	margin: auto;
-	max-width: 600px;
+	max-width: 800px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-
+	padding-top: 10px;
+	padding-bottom: 20px;
 }
 
 blockquote {
@@ -492,7 +496,7 @@ sup {
 
 .footnotes li:target *,
 .footnotes li:focus * {
-	animation: refspotlight 3s;
+	animation: refspotlight 4s;
 }
 
 @keyframes refspotlight {
@@ -593,7 +597,7 @@ article th {
 	vertical-align: bottom;
 	text-align: left;
 	padding: 8px;
-	min-width: 60px;
+	min-width: 65px;
 }
 
 article td {

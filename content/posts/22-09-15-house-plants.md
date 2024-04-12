@@ -1,4 +1,5 @@
 ---
+draft: true
 title: "House Plants: Nature's Silent Roommates"
 subtitle: "Cultivating a Serene and Healthy Living Environment through House Plants: Harnessing Their Transformative Power to Enhance Air Quality, Promote Mental Well-being, and Elevate Interior Aesthetics, Creating a Sanctuary of Natural Bliss"
 date: 2022-09-15
