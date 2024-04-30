@@ -603,6 +603,7 @@ article th {
 article td {
 	vertical-align: top;
 	padding: 8px;
+	max-height: 1000000px; /* Hack for font boosting bug */ 
 }
 
 tr:nth-child(odd) td {
