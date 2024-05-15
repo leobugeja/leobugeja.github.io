@@ -1,5 +1,5 @@
 ---
-# draft: true
+draft: true
 title: "Spring Mass"
 subtitle: ""
 date: 2024-03-30
