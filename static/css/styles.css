@@ -260,10 +260,8 @@ button:active {
 	overflow: hidden;
 	color: black;	
 	text-decoration: none;
-	background: white;
-	border: none;
 	border-radius: 20px;
-	box-shadow: 2px 4px 12px rgba(0,0,0,.15);
+	box-shadow: 2px 4px 14px rgba(0,0,0,.15);
 	transition: .3s cubic-bezier(0,0,.5,1);
 	margin-right: var(--card-horizontal-shadow-shift);
 }
@@ -608,6 +606,12 @@ article td {
 
 tr:nth-child(odd) td {
     background-color:rgb(226, 226, 226);
+}
+
+.spring-mass-canvas {
+	border: 1px solid #000000;
+	width: var(--content-width);
+	aspect-ratio: 1;
 }
 
 /* || Breakpoints */

@@ -1,0 +1,178 @@
+<canvas id="springMassCanvas" class="spring-mass-canvas"></canvas>
+
+<script>
+    class DrawableOject {
+        constructor(initialX, initialY, imageSrc) {
+            this.x = initialX;
+            this.y = initialY;
+            this.image = new Image();
+            this.image.src = imageSrc;
+        }
+
+        draw(ctx) {
+            ctx.drawImage(this.image, this.x, this.y, this.image.width, this.image.height);
+        }
+    }
+
+    class Spring extends DrawableOject {
+        constructor(initialX, initialY, imageSrc, naturalLength, minLength, maxLength, stiffness) {
+            super(initialX, initialY, imageSrc);
+            this.length = naturalLength;
+            this.naturalLength = naturalLength;
+            this.maxLength = maxLength;
+            this.minLength = minLength;
+            this.stiffness = stiffness;
+        }
+
+        draw(ctx) {
+            ctx.drawImage(this.image, this.x, this.y, this.image.width, spring.length*320+35);
+        }
+    }
+
+    class BlockMass extends DrawableOject {
+        constructor(initialX, initialY, imageSrc, mass, velocity = 0, acceleration = 0) {
+            super(initialX, initialY, imageSrc);
+            this.mass = mass;
+            this.velocity = velocity;
+            this.acceleration = acceleration;
+        }
+    }
+
+
+    let base;
+    let blockMass;
+    let spring;
+
+    let canvas;
+    let ctx;
+
+    let previousLoopTime;
+
+    // Simulation variables
+    const gravity = 9.81;
+    let t = 0;
+    let pauseSimulation = false;
+    let isMouseDown = false;
+    let offsetY;
+
+    function init() {
+        base = new DrawableOject(0, 0, "/images/springmass/springbase.png");
+        blockMass = new BlockMass(251, 0, "/images/springmass/mass.png", 1);
+        spring = new Spring(251, 100, "/images/springmass/spring.png", 1, 0, 2, 100);
+
+        canvas = document.getElementById("springMassCanvas");
+        canvas.width = 1000;
+        canvas.height = 1000;
+        ctx = canvas.getContext("2d");
+
+
+        handleSelectMass = (e) => {
+            const rect = canvas.getBoundingClientRect();
+            let x, y;
+            if (e.touches) {
+                x = e.touches[0].clientX - rect.left;
+                y = e.touches[0].clientY - rect.top;
+            } else {
+                x = e.clientX - rect.left;
+                y = e.clientY - rect.top;
+            }
+            if (x > blockMass.x && x < blockMass.x + blockMass.image.width && y > blockMass.y && y < blockMass.y + blockMass.image.height) {
+                pauseSimulation = true;
+                isMouseDown = true;
+                offsetY = y - blockMass.y;
+            }
+        }
+
+        canvas.addEventListener("mousedown", handleSelectMass);
+        canvas.addEventListener("touchstart", handleSelectMass);
+
+        handleMoveMass = (e) => {
+            const rect = canvas.getBoundingClientRect();
+            let x, y;
+            if (e.touches) {
+                x = e.touches[0].clientX - rect.left;
+                y = e.touches[0].clientY - rect.top;
+            } else {
+                x = e.clientX - rect.left;
+                y = e.clientY - rect.top;
+
+                if (x > blockMass.x && x < blockMass.x + blockMass.image.width && y > blockMass.y && y < blockMass.y + blockMass.image.height) {
+                    canvas.style.cursor = 'pointer';
+                } else {
+                    canvas.style.cursor = 'default';
+                }
+            }
+            
+            if (isMouseDown) {
+                e.preventDefault();
+                blockMass.y = y - offsetY;
+                if (blockMass.y > spring.y + spring.maxLength*300) blockMass.y = spring.y + spring.maxLength*300;
+                if (blockMass.y < spring.y + spring.minLength*300) blockMass.y = spring.y + spring.minLength*300;
+                spring.length = (blockMass.y - spring.y) / 300;
+            }
+        }
+
+        canvas.addEventListener("mousemove", handleMoveMass);
+        canvas.addEventListener("touchmove", handleMoveMass, { passive: false });
+
+        handleUnselectMass = (e) => {
+            isMouseDown = false;
+            pauseSimulation = false;
+            blockMass.velocity = 0;
+            blockMass.acceleration = 0;
+        }
+
+        document.addEventListener("mouseup", handleUnselectMass);
+        document.addEventListener("touchend", handleUnselectMass);
+
+        window.requestAnimationFrame(draw);
+    }
+
+    function draw(currentTime) {
+        if (!previousLoopTime) previousLoopTime = currentTime - 1000/60;
+        let timeElapsed = (currentTime - previousLoopTime)/1000;
+        if (timeElapsed > 0.1) timeElapsed = 1/60;
+
+        previousLoopTime = currentTime;
+
+        
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Physical calculations
+        if (!pauseSimulation) {
+            blockMass.acceleration = gravity - (spring.stiffness/blockMass.mass) * (spring.length - spring.naturalLength) - Math.sign(blockMass.velocity)*2;
+            
+            if (spring.length > spring.maxLength) {
+                blockMass.velocity = 0;
+                spring.length = spring.maxLength;
+            } else if (spring.length < 0) {
+                blockMass.velocity = 0;
+                spring.length = 0;
+            } else {
+                blockMass.velocity = blockMass.velocity + blockMass.acceleration * timeElapsed;
+                spring.length = spring.length + 0.5 * blockMass.velocity * timeElapsed;
+            }
+
+
+        }
+        blockMass.y = spring.length*300 + 100;
+
+
+        t += 1;
+        if (t == 10000) {
+            t = 0;
+            console.log(blockMass.acceleration, blockMass.velocity, spring.length);
+        }
+
+        {{/*  ctx.save();
+        ctx.restore();  */}}
+
+        base.draw(ctx);
+        blockMass.draw(ctx);
+        spring.draw(ctx);
+        window.requestAnimationFrame(draw);
+    }
+
+    init();
+</script>
+
