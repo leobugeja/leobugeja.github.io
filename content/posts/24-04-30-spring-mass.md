@@ -8,19 +8,6 @@ thumbnail: /images/springmass/springmassbrush.png
 # headerimage: /images/springmass/springmassbrush.png
 ---
 
-# subtitle
-
-text
 
 {{< spring-mass-canvas >}}
 
-
-
-//
-
-
-# subtitle
-
-bottom test content
-
-## subsubtitle

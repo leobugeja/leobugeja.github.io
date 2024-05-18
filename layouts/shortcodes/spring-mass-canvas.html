@@ -1,6 +1,8 @@
 <canvas id="springMassCanvas" class="spring-mass-canvas"></canvas>
 
-<script>
+<script type="module">
+    import { initSlider, Slider } from '/js/range_slider.js';
+
     class DrawableOject {
         constructor(initialX, initialY, imageSrc) {
             this.x = initialX;
@@ -12,24 +14,60 @@
         draw(ctx) {
             ctx.drawImage(this.image, this.x, this.y, this.image.width, this.image.height);
         }
+
+        inBoundingBox(x, y) {
+            return (x > this.x && x < this.x + this.image.width && y > this.y && y < this.y + this.image.height);
+        }
     }
 
     class Spring extends DrawableOject {
-        constructor(initialX, initialY, imageSrc, naturalLength, minLength, maxLength, stiffness) {
+        constructor(
+            initialX,
+            initialY,
+            imageSrc,
+            naturalLength,
+            minLength,
+            maxLength,
+            stiffness,
+            minSpringStiffness,
+            maxSpringStiffness
+        ) {
             super(initialX, initialY, imageSrc);
             this.length = naturalLength;
             this.naturalLength = naturalLength;
             this.maxLength = maxLength;
             this.minLength = minLength;
             this.stiffness = stiffness;
+            this.minSpringStiffness = minSpringStiffness;
+            this.maxSpringStiffness = maxSpringStiffness;
+
+            this.image.onload = () => {
+                this.springWidth = this.calcSpringWidth();
+            };
+        }
+
+        updateStiffness(newStiffness) {
+            this.stiffness = newStiffness;
+            this.springWidth = this.calcSpringWidth();
+        }
+
+        calcSpringWidth() {
+            return this.image.width * (0.4 + 0.6 * (this.stiffness - this.minSpringStiffness) /
+            (this.maxSpringStiffness - this.minSpringStiffness));
+        }
+
+
+
+        calcSpringLength(bottomSpringPosition, lengthToPixels) {
+            return (bottomSpringPosition - this.y) / lengthToPixels;
         }
 
         draw(ctx) {
-            ctx.drawImage(this.image, this.x, this.y, this.image.width, spring.length*320+35);
+            ctx.drawImage(this.image, this.x - this.springWidth/2, this.y, this.springWidth, spring.length*lengthToPixels);
         }
     }
 
-    class BlockMass extends DrawableOject {
+    class WeightBlock extends DrawableOject {
         constructor(initialX, initialY, imageSrc, mass, velocity = 0, acceleration = 0) {
             super(initialX, initialY, imageSrc);
             this.mass = mass;
@@ -38,89 +76,168 @@
         }
     }
 
+    class Damping extends DrawableOject {
+        constructor(initialX, initialY, imageSrc, dampingCoefficient) {
+            super(initialX, initialY, imageSrc);
+            this.damping = dampingCoefficient;
+        }
+
+        updateDamping(newDampingCoefficient) {
+            this.damping = newDampingCoefficient;
+
+        }
+
+        draw(ctx) {
+            const previousGlobalAlpha = ctx.globalAlpha;
+            ctx.globalAlpha = this.damping;
+            ctx.drawImage(this.image, this.x, this.y, this.image.width/4, this.image.height/4);
+            ctx.globalAlpha = previousGlobalAlpha;
+        }
+    }
 
     let base;
-    let blockMass;
+    let weightBlock;
     let spring;
+    let damping;
 
-    let canvas;
     let ctx;
 
-    let previousLoopTime;
+    let previousLoopTimeMs;
+    let mouseSelectOffsetY;
+    let currentDragY = 0;
+    let previousDragY = 0;
+    let previousScrollPosition = 0;
+    let previousScrollSpeed = 0;
+    let scrollAcceleration = 0;
+    let lastScrollTime = Date.now();
 
-    // Simulation variables
+    let pauseSimulation = false;
+    let isBlockSelected = false;
+
+    const baseWidth = 700;
+    const baseHeight = 130;
+    const springWidth = 196;
+    const massWidth = 196;
+    const massHeight = 156;
+    const lengthToPixels = 300; 
+
+    let canvas = document.getElementById("springMassCanvas");
+    canvas.width = baseWidth;
+    canvas.height = baseWidth * 1.2;
+
+    const minSpringStiffness = 40;
+    const maxSpringStiffness = 200;
+    const initialSpringStiffness = 120;
+    const springNaturalLength = 0.8;
+    const springMinLength = 0.1;
+    const springMaxLength = 0.64 * canvas.height / lengthToPixels;
+    const blockMass = 1;
+
     const gravity = 9.81;
     let t = 0;
-    let pauseSimulation = false;
-    let isMouseDown = false;
-    let offsetY;
+
+
+    function convertPageToCanvasPos(pageX, pageY) {
+        const rect = canvas.getBoundingClientRect();
+        const pageToCanvasXPixelScale = canvas.width / rect.width;
+        const pageToCanvasYPixelScale = canvas.height / rect.height;
+        return {
+            canvasX: (pageX - rect.left) * pageToCanvasXPixelScale,
+            canvasY: (pageY - rect.top) * pageToCanvasYPixelScale
+        };
+    }
+
+
 
     function init() {
         base = new DrawableOject(0, 0, "/images/springmass/springbase.png");
-        blockMass = new BlockMass(251, 0, "/images/springmass/mass.png", 1);
-        spring = new Spring(251, 100, "/images/springmass/spring.png", 1, 0, 2, 100);
+        spring = new Spring(baseWidth/2, baseHeight-16, "/images/springmass/spring.png", springNaturalLength, springMinLength, springMaxLength, initialSpringStiffness, minSpringStiffness, maxSpringStiffness);
+        weightBlock = new WeightBlock(baseWidth/2 - massWidth/2, 0, "/images/springmass/mass.png", blockMass);
+        damping = new Damping(500, 600, "/images/springmass/windblowing.png", 0.5);
 
-        canvas = document.getElementById("springMassCanvas");
-        canvas.width = 1000;
-        canvas.height = 1000;
+        initSlider(spring.updateStiffness.bind(spring), initialSpringStiffness, spring.minSpringStiffness, spring.maxSpringStiffness);
+        new Slider("stiffness_slider", spring.updateStiffness.bind(spring), initialSpringStiffness, minSpringStiffness, maxSpringStiffness);
+
         ctx = canvas.getContext("2d");
 
+        window.addEventListener('scroll', (e) => {
+            currentScrollPosition = window.scrollY / lengthToPixels;
 
-        handleSelectMass = (e) => {
-            const rect = canvas.getBoundingClientRect();
-            let x, y;
-            if (e.touches) {
-                x = e.touches[0].clientX - rect.left;
-                y = e.touches[0].clientY - rect.top;
-            } else {
-                x = e.clientX - rect.left;
-                y = e.clientY - rect.top;
+
+            scrollDeltaTimeS = (Date.now() - lastScrollTime)/1000;
+            if (scrollDeltaTimeS > 4/60) {
+                scrollDeltaTimeS = 1/60;
+                previousScrollSpeed = 0;
             }
-            if (x > blockMass.x && x < blockMass.x + blockMass.image.width && y > blockMass.y && y < blockMass.y + blockMass.image.height) {
+            scrollSpeed = (currentScrollPosition - previousScrollPosition) / scrollDeltaTimeS;
+            scrollAcceleration = (scrollSpeed - previousScrollSpeed) / scrollDeltaTimeS;
+
+            previousScrollPosition = currentScrollPosition;
+            previousScrollSpeed = scrollSpeed;
+            lastScrollTime = Date.now();
+        });
+
+        const handleSelectMass = (e) => {
+            const { clientX, clientY } = e.touches ? e.touches[0] : e;
+            const { canvasX, canvasY } = convertPageToCanvasPos(clientX, clientY);
+
+            if (weightBlock.inBoundingBox(canvasX, canvasY)) {
                 pauseSimulation = true;
-                isMouseDown = true;
-                offsetY = y - blockMass.y;
+                isBlockSelected = true;
+                mouseSelectOffsetY = canvasY - weightBlock.y;
+
+                currentDragY, previousDragY = canvasY;
             }
-        }
+        };
 
         canvas.addEventListener("mousedown", handleSelectMass);
         canvas.addEventListener("touchstart", handleSelectMass);
 
-        handleMoveMass = (e) => {
-            const rect = canvas.getBoundingClientRect();
-            let x, y;
-            if (e.touches) {
-                x = e.touches[0].clientX - rect.left;
-                y = e.touches[0].clientY - rect.top;
-            } else {
-                x = e.clientX - rect.left;
-                y = e.clientY - rect.top;
+        function calcBottomSpringPosition(targetCanvasY, spring) {
+            const springTopLimit = spring.y + spring.maxLength*lengthToPixels;
+            const springBottomLimit = spring.y + spring.minLength*lengthToPixels;
 
-                if (x > blockMass.x && x < blockMass.x + blockMass.image.width && y > blockMass.y && y < blockMass.y + blockMass.image.height) {
-                    canvas.style.cursor = 'pointer';
-                } else {
-                    canvas.style.cursor = 'default';
-                }
+            if (targetCanvasY > springTopLimit) {
+                return springTopLimit;
+            } else if (targetCanvasY < springBottomLimit) {
+                return springBottomLimit;
+            }
+            return targetCanvasY;
+        }
+
+        const handleMoveMass = (e) => {
+            const { clientX, clientY } = e.touches ? e.touches[0] : e;
+            const { canvasX, canvasY } = convertPageToCanvasPos(clientX, clientY);
+
+            if (!e.touches) { // Has a mouse cursor
+                canvas.style.cursor = weightBlock.inBoundingBox(canvasX, canvasY) ? 'pointer' : 'default';
             }
             
-            if (isMouseDown) {
-                e.preventDefault();
-                blockMass.y = y - offsetY;
-                if (blockMass.y > spring.y + spring.maxLength*300) blockMass.y = spring.y + spring.maxLength*300;
-                if (blockMass.y < spring.y + spring.minLength*300) blockMass.y = spring.y + spring.minLength*300;
-                spring.length = (blockMass.y - spring.y) / 300;
+            if (isBlockSelected) {
+                if (e.touches) e.preventDefault(); // prevent scrolling on mobile
+
+                const targetYPosition = canvasY - mouseSelectOffsetY;
+                const newBottomSpringPosition = calcBottomSpringPosition(targetYPosition, spring);
+                spring.length = spring.calcSpringLength(newBottomSpringPosition, lengthToPixels);
+
+                previousDragY = currentDragY;     
+            } else {
+                previousDragY = canvasY;
             }
-        }
+            currentDragY = canvasY;
+        };
 
         canvas.addEventListener("mousemove", handleMoveMass);
         canvas.addEventListener("touchmove", handleMoveMass, { passive: false });
 
-        handleUnselectMass = (e) => {
-            isMouseDown = false;
-            pauseSimulation = false;
-            blockMass.velocity = 0;
-            blockMass.acceleration = 0;
-        }
+        const handleUnselectMass = (e) => {
+            if (isBlockSelected) {        
+                isBlockSelected = false;
+                pauseSimulation = false;
+                weightBlock.velocity = (currentDragY - previousDragY) / lengthToPixels / (1/60);
+                weightBlock.acceleration = 0;
+            }
+        };
 
         document.addEventListener("mouseup", handleUnselectMass);
         document.addEventListener("touchend", handleUnselectMass);
@@ -128,51 +245,49 @@
         window.requestAnimationFrame(draw);
     }
 
-    function draw(currentTime) {
-        if (!previousLoopTime) previousLoopTime = currentTime - 1000/60;
-        let timeElapsed = (currentTime - previousLoopTime)/1000;
-        if (timeElapsed > 0.1) timeElapsed = 1/60;
-
-        previousLoopTime = currentTime;
-
-        
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Physical calculations
+    function calculateNewState(blockMass, spring, timeElapsedS, scrollAcceleration, pauseSpringForces) {
         if (!pauseSimulation) {
-            blockMass.acceleration = gravity - (spring.stiffness/blockMass.mass) * (spring.length - spring.naturalLength) - Math.sign(blockMass.velocity)*2;
+            blockMass.acceleration = gravity + scrollAcceleration - (spring.stiffness/blockMass.mass) * (spring.length - spring.naturalLength) - Math.sign(blockMass.velocity)*2;
             
-            if (spring.length > spring.maxLength) {
+            if (spring.length > spring.maxLength || spring.length < spring.minLength) {
                 blockMass.velocity = 0;
-                spring.length = spring.maxLength;
-            } else if (spring.length < 0) {
-                blockMass.velocity = 0;
-                spring.length = 0;
+                spring.length = spring.length > spring.maxLength ? spring.maxLength : spring.minLength;
             } else {
-                blockMass.velocity = blockMass.velocity + blockMass.acceleration * timeElapsed;
-                spring.length = spring.length + 0.5 * blockMass.velocity * timeElapsed;
+                blockMass.velocity += blockMass.acceleration * timeElapsedS;
+                spring.length += 0.5 * blockMass.velocity * timeElapsedS;
             }
-
-
         }
-        blockMass.y = spring.length*300 + 100;
+        blockMass.y = spring.length*lengthToPixels + baseHeight - 30;
+    }
 
+    function draw(currentTimeMs) {
+        previousLoopTimeMs = previousLoopTimeMs || currentTimeMs - 1000/60;
+        let timeElapsedS = Math.min((currentTimeMs - previousLoopTimeMs)/1000, 1/10);
+        previousLoopTimeMs = currentTimeMs;
 
+        calculateNewState(weightBlock, spring, timeElapsedS, scrollAcceleration, pauseSimulation);
+        scrollAcceleration = 0;
+
+        // Log state
         t += 1;
         if (t == 10000) {
             t = 0;
-            console.log(blockMass.acceleration, blockMass.velocity, spring.length);
+            console.log(weightBlock.acceleration, weightBlock.velocity, spring.length);
         }
 
-        {{/*  ctx.save();
-        ctx.restore();  */}}
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         base.draw(ctx);
-        blockMass.draw(ctx);
+        weightBlock.draw(ctx);
         spring.draw(ctx);
+        damping.draw(ctx);
+
         window.requestAnimationFrame(draw);
     }
 
     init();
 </script>
 
+{{ partial "range_slider" }}
+
+<div id="stiffness_slider"></div>
