@@ -8,6 +8,9 @@ thumbnail: /images/springmass/springmassbrush.png
 # headerimage: /images/springmass/springmassbrush.png
 ---
 
+{{< slider "Spring Stiffness" "stiffness_slider">}}
+
+{{< slider "Damping" "damping_slider">}}
 
 {{< spring-mass-canvas >}}
 

@@ -631,7 +631,8 @@ tr:nth-child(odd) td {
 }
 
 .spring-mass-canvas {
-	border: 1px solid #000000;
+	/* border: 1px solid #000000; */
+	padding-top: 50px;
 	width: 100%;
 	aspect-ratio: 1;
 	/* object-fit: contain; */

@@ -7,9 +7,11 @@
 
 	{{/*  <h2>{{ .Page.Params.subtitle }}</h2>  */}}
 
-	<div class="article-imagecontainer">
-		<img src="{{ .Page.Params.headerimage }}" class="card-image">
-	</div>
+	{{ with .Page.Params.headerimage }}
+		<div class="article-imagecontainer">
+			<img src="{{ . }}" class="card-image">
+		</div>
+	{{ end }}
 
 	<article>
 		{{ .Content }}
