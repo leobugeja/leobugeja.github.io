@@ -7,36 +7,37 @@ export class Slider {
 
         let slider_container = document.getElementById(containerId);
 
-        this.track = document.createElement("div");
-        this.track.classList.add("slider_track");
-        this.handle = document.createElement("div");
-        this.handle.classList.add("slider_handle");
+        this.track = document.createElement('div');
+        this.track.classList.add('slider_track');
+
+        this.handle = document.createElement('div');
+        this.handle.classList.add('slider_handle');
 
         this.track.appendChild(this.handle);
         slider_container.appendChild(this.track);
 
         this.isDragging = false;
 
-        this.handle.style.left = this.track.offsetWidth * this.valuePercentage - this.handle.clientWidth/2 + 'px';
+        this.handle.style.left = this.valuePercentage * this.getTrackWidth() + 'px';
 
         const moveHandle = (e) => {
             const { pageX } = e.touches ? e.touches[0] : e;
             let handleRelativeX = pageX - this.track.offsetLeft - (this.handle.clientWidth / 2);
     
-            let trackWidth = this.track.offsetWidth - this.handle.clientWidth;
+            const trackWidth = this.getTrackWidth();
             if (handleRelativeX < 0) handleRelativeX = 0;
             if (handleRelativeX > trackWidth) handleRelativeX = trackWidth;
 
             this.handle.style.left = handleRelativeX + 'px';
     
             this.valuePercentage = handleRelativeX / trackWidth;
-            let newValue = this.minValue + (this.maxValue - this.minValue) * this.valuePercentage;
+            const newValue = this.minValue + (this.maxValue - this.minValue) * this.valuePercentage;
             newValueCallback(newValue);
+            console.log(this.valuePercentage, newValue);
         }
 
-        window.addEventListener('resize', (e) => {
-            let trackWidth = this.track.offsetWidth;
-            let handleRelativeX = this.valuePercentage * trackWidth;
+        window.addEventListener('resize', () => {
+            const handleRelativeX = this.valuePercentage * this.getTrackWidth();
             this.handle.style.left = handleRelativeX + 'px'
         });
     
@@ -73,6 +74,7 @@ export class Slider {
                 document.body.style.userSelect = 'auto';
             }
         });
+
         window.addEventListener('touchmove', (e) => {
             if (this.isDragging) {
                 e.preventDefault(); // prevent scrolling on mobile
@@ -81,4 +83,7 @@ export class Slider {
         }, { passive: false });
     }
 
+    getTrackWidth() {
+        return this.track.offsetWidth - this.handle.clientWidth;
+    }
 }

@@ -19,8 +19,13 @@ class DrawableOject {
         ctx.drawImage(this.image, this.x, this.y, widthScaling * this.image.width, heightScaling * this.image.height);
     }
 
-    inBoundingBox(x, y) {
-        return (x > this.x && x < this.x + this.image.width && y > this.y && y < this.y + this.image.height);
+    inBoundingBox(x, y, padding = 40) {
+        return (
+            x > this.x - padding &&
+            x < this.x + this.image.width + padding && 
+            y > this.y - padding &&
+            y < this.y + this.image.height + padding
+        );
     }
 }
 
@@ -378,7 +383,7 @@ function convertPageToCanvasPos(pageX, pageY, pageCanvas) {
 }
 
 
-// Instatiate objects
+// Instantiate objects
 const baseX = 0.1 * springBaseWidth;
 const baseY = 0.1 * springBaseWidth;
 const base = new DrawableOject('/images/springmass/springbase.png', baseX, baseY);
@@ -405,12 +410,13 @@ window.addEventListener('scroll', () => scrollPhysics.updateScrollAcceleration(l
 // Don't allow interaction other than scrolling if canvas is a card thumbnail
 if (!isCanvasThumbnail) {
     const handleSelectMass = (e) => {
-        e.preventDefault(); // prevent text highlighting on drag
 
         const { clientX, clientY } = e.touches ? e.touches[0] : e;
         const { canvasX, canvasY } = convertPageToCanvasPos(clientX, clientY, canvas);
 
         if (weightBlock.inBoundingBox(canvasX, canvasY)) {
+            e.preventDefault(); // prevent text highlighting on drag
+
             pauseSimulation = true;
             weightBlock.select(canvasY);
         }
