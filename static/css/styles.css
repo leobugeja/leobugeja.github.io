@@ -26,7 +26,9 @@
 	--card-title-font-size: calc((var(--card-content-width) - 2*var(--card-title-padding)) * 0.08);
 
 	--article-width: min(1060px, calc(100vw - 2*var(--side-padding)));
-	--background-color: #f8f9fa
+	--background-color: rgb(248, 249, 250);
+	--primary-grey: rgb(226, 226, 226);
+	--secondary-grey: rgb(160, 160, 160);
 }
 
 h1 {
@@ -315,7 +317,6 @@ button:active {
 
 .card-date {
 	color: grey;
-	/*position: absolute;*/
 	bottom: 0;
 	left: 0;
 	font-size: calc(var(--card-title-font-size) * 0.7);
@@ -324,7 +325,6 @@ button:active {
 /* || Article */
 
 .article-main {
-	/* background: rgba(255, 255, 255, 0); */
 	margin: auto;
 	padding: 20px var(--side-padding) 40px var(--side-padding);
 	max-width: var(--post-width);
@@ -336,7 +336,6 @@ button:active {
 }
 
 .article-subtitle {
-
 }
 
 .article-datediv {
@@ -463,9 +462,6 @@ sup:target *, sup:focus *{
 sup {
 	font-size: 0.7em;
 	vertical-align: super;
-	/* position: relative; */
-	/* top: -0.5em; */
-	/* vertical-align: baseline; */
 	text-align: center;
 	line-height: 1em;
 }
@@ -510,7 +506,7 @@ sup {
 }
 
 code {
-	background-color: rgb(226, 226, 226);
+	background-color: var(--primary-grey);
 	padding: 0.14rem 0.3rem 0.18rem 0.3rem;
 	border-radius: 8px;
 	white-space: break-spaces;
@@ -536,7 +532,7 @@ code {
 .highlight code span { 
 	font-family: 'Roboto Mono', monospace; /* TODO: fix being able to include with above block */
 	line-height: 1.4em;
-	background-color: rgb(226, 226, 226);	
+	background-color: var(--primary-grey);	
 }
 
 .chroma * {
@@ -547,7 +543,7 @@ pre code:before {
 	display: block;
 	content: attr(data-lang);
 	margin-top: -1.6em;
-	color: rgb(160, 160, 160);
+	color: var(--secondary-grey);
 	text-transform: uppercase;
 	font-weight: bold;
 	position: absolute;
@@ -558,7 +554,7 @@ pre code:before {
 }
 
 .highlight pre::-webkit-scrollbar-thumb {
-	background-color: rgb(160, 160, 160);
+	background-color: var(--secondary-grey);
 	border-radius: 1em;
 	border: 0.28em solid rgba(0, 0, 0, 0);
 	background-clip: padding-box;
@@ -566,7 +562,7 @@ pre code:before {
 
 .highlight {
 	pre {
-		background-color: rgb(226, 226, 226) !important;
+		background-color: var(--primary-grey) !important;
 	}
 }
 
@@ -575,7 +571,7 @@ article table::-webkit-scrollbar {
 }
 
 article table::-webkit-scrollbar-thumb {
-	background-color: rgb(160, 160, 160);
+	background-color: var(--secondary-grey);
 	border-radius: 1em;
 	border: 0.28em solid rgba(0, 0, 0, 0);
 	background-clip: padding-box;
@@ -586,9 +582,8 @@ article table {
 	overflow-x: overlay;
 	width: 100%;
 	display: block;
-	border: 3px solid  rgb(226, 226, 226);
+	border: 3px solid  var(--primary-grey);
 	border-radius: 10px;
-	/* padding-bottom: -1em; */
 }
 
 article th {
@@ -605,7 +600,7 @@ article td {
 }
 
 tr:nth-child(odd) td {
-    background-color:rgb(226, 226, 226);
+    background-color:var(--primary-grey);
 }
 
 
@@ -613,7 +608,7 @@ tr:nth-child(odd) td {
 	-webkit-tap-highlight-color: transparent;
 	max-width: 700px;
 	height: 5px;
-	background: rgb(226, 226, 226);
+	background: var(--primary-grey);
 	margin: 20px max(50px, calc(50% - 350px));
 	border-radius: 4px;
 	cursor: pointer;
@@ -623,19 +618,16 @@ tr:nth-child(odd) td {
 	width: 30px;
 	height: 30px;
 	background:
-	#acacac; position:
-	relative;
+	#acacac;
+	position:relative;
 	top: -13px;
 	border-radius: 20px;
 	cursor: pointer
 }
 
 .spring-mass-canvas {
-	/* border: 1px solid #000000; */
-	padding-top: 50px;
 	width: 100%;
-	aspect-ratio: 1;
-	/* object-fit: contain; */
+    aspect-ratio: 8 / 7;
 }
 
 /* || Breakpoints */

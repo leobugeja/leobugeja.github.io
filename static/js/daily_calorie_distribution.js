@@ -1,3 +1,5 @@
+// Work in progress
+
 // set the dimensions and margins of the graph
 
 function importData() {
@@ -139,6 +141,7 @@ let options = {
   chart: {
       marginTop: 40,
       marginBottom: 80,
+      backgroundColor: "#eceff1",
   },
   title: {
       text: null

@@ -1,7 +1,12 @@
 <a href="{{ .Permalink }}" class="card-anchor" id="card">
 	<div class="card-content">
+		
 		<div class="card-imagecontainer">
+			{{ if .Page.Params.thumbnail }}
 			<img src="{{ .Page.Params.thumbnail }}" class="card-image">
+			{{ else if .Page.Params.canvasThumbnail }}
+			{{ partial "spring_mass_thumbnail.html" (dict  "isThumbnail" "true")}}
+			{{ end }}
 		</div>
 
 		<div class="card-textcontainer"> 
@@ -19,11 +24,6 @@
 					</td>
 				</tr>
 			</table>
-
-			<!-- <div class="card-title">
-				{{ .Title }}
-			</div>
-			{{ partial "card_date.html" . }} -->
 		</div>
 	</div>
 </a>
