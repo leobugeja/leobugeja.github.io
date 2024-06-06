@@ -15,6 +15,6 @@ canvasThumbnail: "spring_mass_canvas_thumbnail.html"
 
 
 ## Desription
-🖱️ Scroll the page or drag the weight to interact with the system.
+🖱️ Scroll the page or drag the bottom mass to interact with the system.
 
 The damping represents air resistance and internal energy dissipation from extension and compression of the spring.
