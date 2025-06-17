@@ -1,21 +1,24 @@
 function getCardDate(card_creation_date) {
-	var todays_date = new Date().getTime() / 1000;
-	var ageDays = Math.floor((todays_date - card_creation_date) / 86400);
-	var ageMonths = Math.floor((todays_date - card_creation_date) / 2592000);
-	var ageYears = Math.floor((todays_date - card_creation_date) / 31536000);
+    var creationDate = new Date(card_creation_date * 1000);
+    var today = new Date();
 
-	if (ageDays == 0) {
-		date_string = "today"
-	} else if (ageDays < 31) {
-		suffix = (ageDays == 1) ? " day ago" : " days ago";
-		date_string = ageDays.toString() + suffix;
-	} else if (ageMonths < 12) {
-		suffix = (ageMonths == 1) ? " month ago" : " months ago";
-		date_string = ageMonths.toString() + suffix;
-	} else {
-		suffix = (ageYears == 1) ? " year ago" : " years ago";
-		date_string = ageYears.toString() + suffix;
-	}
-	var me = document.currentScript;
-	me.parentElement.textContent = date_string;
+    var years = today.getFullYear() - creationDate.getFullYear();
+    var months = today.getMonth() - creationDate.getMonth();
+	var diffDays = Math.floor((today - creationDate) / (1000 * 60 * 60 * 24));
+	var date_string;
+
+    if (years > 0) {
+        date_string = years === 1 ? '1 year ago' : years + ' years ago';
+    } else if (months > 0) {
+        date_string = months === 1 ? '1 month ago' : months + ' months ago';
+    } else {
+        if (diffDays === 0) {
+            date_string = 'today';
+        } else {
+            date_string = diffDays === 1 ? '1 day ago' : diffDays + ' days ago';
+        }
+    }
+
+    var me = document.currentScript;
+    me.parentElement.textContent = date_string;
 }
