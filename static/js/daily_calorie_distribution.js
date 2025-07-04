@@ -141,7 +141,7 @@ let options = {
   chart: {
       marginTop: 40,
       marginBottom: 80,
-      backgroundColor: "#eceff1",
+      backgroundColor: '#eceff1',
   },
   title: {
       text: null
