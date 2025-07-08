@@ -1,0 +1,150 @@
+// Calculate the residuals from the body weight data
+Highcharts.ajax({
+  url: '/data/bodyweight.csv',
+  dataType: 'csv',
+  success: function(data) {
+    // Parse the CSV data in format dd/mm/yyyy,bodyweight
+    var bodyWeight = [];
+    var dates = [];
+    var lines = data.split('\n');
+    for (var i = 1; i < lines.length; i++) {
+        var parts = lines[i].split(',');
+        if (parts.length === 2) {
+            dates.push(parts[0]);
+            bodyWeight.push(parseFloat(parts[1]));
+        }
+    }
+    // Calculate the 14 day moving average
+    var movingAverage = [];
+    for (var i = 0; i < bodyWeight.length; i++) {
+      if (i < 7) {
+        movingAverage.push(null); // Not enough data for the first 7 days
+      } else {
+        var sum = 0;
+        for (var j = i - 7; j < i + 7; j++) {
+          sum += bodyWeight[j];
+        }
+        movingAverage.push(sum / 14);
+      }
+    }   
+    // Calculate the residuals
+    var residuals = [];
+    for (var i = 0; i < bodyWeight.length; i++) {
+      if (movingAverage[i] && bodyWeight[i]) {
+        residuals.push(bodyWeight[i] - movingAverage[i]);
+      }
+    }
+    // Create the histogram data
+    var histogramData = [];
+    var minResidual = Math.min(...residuals);
+    var maxResidual = Math.max(...residuals);
+    var binSize = (maxResidual - minResidual) / 20;
+    for (var i = 0; i < 20; i++) {
+      histogramData.push({
+        x: minResidual + i * binSize,
+        y: 0
+      });
+    }   
+    for (var i = 0; i < residuals.length; i++) {
+      var binIndex = Math.floor((residuals[i] - minResidual) / binSize);
+      if (binIndex >= 0 && binIndex < histogramData.length) {
+        histogramData[binIndex].y++;
+      }
+    }
+    // Calculate the mean and standard deviation of the residuals
+    var mean = residuals.reduce((a, b) => a + b, 0) / residuals.length;
+    var stdDev = Math.sqrt(residuals.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / residuals.length);
+
+    // Generate normal distribution curve data
+    var normalData = [];
+    var totalCount = residuals.length;
+    for (var i = 0; i < 200; i++) {
+      var x = minResidual + (i / 199) * (maxResidual - minResidual);
+      // Normal PDF
+      var y = (1 / (stdDev * Math.sqrt(2 * Math.PI))) * Math.exp(-0.5 * Math.pow((x - mean) / stdDev, 2));
+      // Scale to histogram frequency
+      y = y * binSize * totalCount;
+      normalData.push([x, y]);
+    }
+
+    // Add the histogram data and normal curve to the chart
+    Highcharts.chart('residuals-distribution', {
+        chart: {
+            backgroundColor: 'transparent',
+        },
+        title: false,
+        legend: {
+            enabled: true,
+            labelFormatter: function() {
+                if (this.name === 'Normal Distribution') {
+                    return 'Normal Distribution<br>μ = ' + mean.toFixed(2) + ' kg, σ = ' + stdDev.toFixed(2) + ' kg';
+                }
+                if (this.name === 'Residuals') {
+                    return 'Residuals Histogram';
+                }
+                return this.name;
+            }
+        },
+        xAxis: {
+            title: {
+                text: 'Daily Weight Fluctuation (kg)'
+            },
+            bins: 20,
+            labels: {
+                format: '{value} kg'
+            },
+            // alignTicks: true
+        },
+        yAxis: {
+            title: {
+                text: 'Frequency'
+            }
+        },
+        series: [
+            {
+                name: 'Residuals',
+                type: 'column',
+                data: histogramData,
+                color: '#7cb5ec',
+                grouping: false,
+                pointWidth: document.getElementById('residuals-distribution').offsetWidth / 20,
+            },
+            {
+                name: 'Normal Distribution',
+                type: 'spline',
+                data: normalData,
+                color: 'rgba(124, 125, 125, 0.9)',
+                marker: { enabled: false },
+                enableMouseTracking: false
+            }
+        ],
+        tooltip: {
+            formatter: function() {
+                if (this.series.name === 'Residuals') {
+                    return '<b>Residual:</b> ' + this.x.toFixed(2) + '<br/>' +
+                        '<b>Frequency:</b> ' + this.y;
+                } else {
+                    return false;
+                }
+            }
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0,
+                borderWidth: 0,
+                groupPadding: 0,
+                shadow: false,
+                borderRadius: 0,
+            },
+            spline: {
+                lineWidth: 4,
+                states: {
+                    hover: {
+                        lineWidth: 2
+                    }
+                }
+            }
+        }
+    });
+  }
+});
