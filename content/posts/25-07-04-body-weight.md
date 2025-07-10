@@ -14,8 +14,8 @@ thumbnail: /images/bodyweight/bodyweightthumbnail.png
 
 # One method to analytically tradeoff Bias and Variance
 
-{{< body_weight_history >}}
+{{< body_weight_article/body_weight_history >}}
 
-{{< residuals_distribution >}}
+{{< body_weight_article/residuals_distribution >}}
 
 # Whats the minimum calorie surpless/deficit to be certain after a week that you are actually gaining or loosing weight after 1 month?
