@@ -18,4 +18,8 @@ thumbnail: /images/bodyweight/bodyweightthumbnail.png
 
 {{< body_weight_article/residuals_distribution >}}
 
+{{< body_weight_article/body_weight_moving_average >}}
+
+{{< slider "Moving Day Average" "moving_day_average">}}
+
 # Whats the minimum calorie surpless/deficit to be certain after a week that you are actually gaining or loosing weight after 1 month?

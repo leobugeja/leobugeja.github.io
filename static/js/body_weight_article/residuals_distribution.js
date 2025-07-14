@@ -1,39 +1,18 @@
 /* global Highcharts */
 Highcharts.ajax({
-   url: '/data/bodyweight.csv',
+   url: '/data/body_weight_article/bodyweight.csv',
    dataType: 'csv',
    success: function(data) {
-      // Parse the CSV data in format dd/mm/yyyy,bodyweight
-      var bodyWeight = [];
-      var dates = [];
+      // Parse the CSV residuals from /data/body_weight_article/residuals.csv
+      var residuals = [];
       var lines = data.split('\n');
       for (var i = 1; i < lines.length; i++) {
          var parts = lines[i].split(',');
          if (parts.length === 2) {
-            dates.push(parts[0]);
-            bodyWeight.push(parseFloat(parts[1]));
+            residuals.push(parseFloat(parts[1]));
          }
       }
-      // Calculate the 14 day moving average
-      var movingAverage = [];
-      for (var i = 0; i < bodyWeight.length; i++) {
-         if (i < 7) {
-            movingAverage.push(null); // Not enough data for the first 7 days
-         } else {
-            var sum = 0;
-            for (var j = i - 7; j < i + 7; j++) {
-               sum += bodyWeight[j];
-            }
-            movingAverage.push(sum / 14);
-         }
-      }   
-      // Calculate the residuals
-      var residuals = [];
-      for (var i = 0; i < bodyWeight.length; i++) {
-         if (movingAverage[i] && bodyWeight[i]) {
-            residuals.push(bodyWeight[i] - movingAverage[i]);
-         }
-      }
+
       // Create the histogram data
       var histogramData = [];
       var minRange = -1.25;

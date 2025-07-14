@@ -11,7 +11,7 @@ canvasThumbnail: "spring_mass_canvas_thumbnail.html"
 
 {{< slider "Spring Stiffness" "stiffness_slider">}}
 
-{{< slider "Damping" "damping_slider">}}  
+{{< slider "Damping" "damping_slider">}}
 
 
 ## Desription

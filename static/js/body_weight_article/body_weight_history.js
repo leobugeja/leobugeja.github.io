@@ -1,7 +1,7 @@
 /* global Highcharts */
 
 // put legend on top of the chart
-Highcharts.chart('body-weight-history', {
+var bodyWeightHistoryChart = Highcharts.chart('body-weight-history', {
    chart: {
       type: 'line',
       marginBottom: 100,
@@ -32,7 +32,7 @@ Highcharts.chart('body-weight-history', {
 });
 
 Highcharts.ajax({
-   url: '/data/bodyweight.csv',  
+   url: '/data/body_weight_article/bodyweight.csv',  
    dataType: 'text',
    success: function (data) {  
       var lines = data.split('\n');  
@@ -68,13 +68,13 @@ Highcharts.ajax({
 
 
 // set chart x axis limit from Jan 2024 to May 2024
-Highcharts.charts[0].xAxis[0].setExtremes(Date.UTC(2024, 0, 1), Date.UTC(2024, 4, 31));
+bodyWeightHistoryChart.xAxis[0].setExtremes(Date.UTC(2024, 0, 1), Date.UTC(2024, 4, 31));
 
 // import from data/netcalories.csv its in format dd/mm/yyyy,netcalories
 // Calculate the day by day calories i.e. sum the current day net calories to all the previous day net calories
 // Then convert this sum of net calories to a weight in kg and plot on the same chart
 Highcharts.ajax({
-   url: '/data/netcalories.csv',  
+   url: '/data/body_weight_article/netcalories.csv',  
    dataType: 'text',
    success: function (data) {  
       var lines = data.split('\n');
@@ -94,7 +94,7 @@ Highcharts.ajax({
             seriesData.push([date, initialWeight + weightChange]);  
          }  
       }
-      Highcharts.charts[0].addSeries({  
+      bodyWeightHistoryChart.addSeries({  
          name: 'Energy Balance Weight Prediction',  
          data: seriesData,  
          tooltip: {
