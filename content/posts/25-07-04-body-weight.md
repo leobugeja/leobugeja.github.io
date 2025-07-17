@@ -22,4 +22,12 @@ thumbnail: /images/bodyweight/bodyweightthumbnail.png
 
 {{< slider "Moving Day Average" "moving_day_average">}}
 
+$$ MSE = \sigma ^2 + \mu^2 $$
+
+$$ MSE = 0.35 ^2 + 0^2 = 0.1225 $$
+
+$$ MSE = \frac{0.35 kg}{\sqrt{d}}^{2} + (\frac{d}{2} * 0.07)^2 $$
+
+
+
 # Whats the minimum calorie surpless/deficit to be certain after a week that you are actually gaining or loosing weight after 1 month?

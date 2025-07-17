@@ -117,28 +117,21 @@ Highcharts.ajax({
    }
 });
 
+let lastSliderValue = lastMovingAverageDays; // Track last integer value used
+
 // Slider callback to update moving average
 new Slider('moving_day_average', 
    function (days) {
       if (rawSeriesData.length === 0) return;
-      // Remove existing moving average series and add new one
-      // Remove all series and re-add both for consistency
-      while (movingAverageChart.series.length > 0) {
-         movingAverageChart.series[0].remove(false);
+      // Round days to nearest integer
+      days = Math.round(days);
+      // Only update if the value changed
+      if (days === lastSliderValue) return;
+      lastSliderValue = days;
+      // Only remove the moving average series (assume it's always the last series)
+      if (movingAverageChart.series.length > 1) {
+         movingAverageChart.series[movingAverageChart.series.length - 1].remove(false);
       }
-      // Add measured data
-      movingAverageChart.addSeries({
-         name: 'Measured Body Weight',
-         data: rawSeriesData,
-         tooltip: { valueSuffix: ' kg' },
-         marker: {
-            enabled: true,
-            radius: 3,
-            symbol: 'circle'
-         },
-         lineWidth: 0,
-         color: 'rgba(124, 125, 125, 0.7)'
-      }, false);
       // Add new moving average
       const movingAvgData = calculateMovingAverage(rawSeriesData, days);
       movingAverageChart.addSeries({
@@ -156,7 +149,7 @@ new Slider('moving_day_average',
       movingAverageChart.redraw();
    },
    lastMovingAverageDays,
-   1,
+   2,
    30
 );
 

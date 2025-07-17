@@ -1,32 +1,32 @@
 /* global Highcharts */
 Highcharts.ajax({
-   url: '/data/body_weight_article/bodyweight.csv',
+   url: '/data/body_weight_article/residuals.csv', // FIXED: use the correct CSV file
    dataType: 'csv',
    success: function(data) {
       // Parse the CSV residuals from /data/body_weight_article/residuals.csv
       var residuals = [];
       var lines = data.split('\n');
-      for (var i = 1; i < lines.length; i++) {
-         var parts = lines[i].split(',');
+      for (var idx = 1; idx < lines.length; idx++) { // use idx instead of i
+         var parts = lines[idx].split(',');
          if (parts.length === 2) {
             residuals.push(parseFloat(parts[1]));
          }
       }
 
       // Create the histogram data
-      var histogramData = [];
       var minRange = -1.25;
       var maxRange = 1.25;
       var binSize = 0.25 / 4;
       var numBins = Math.ceil((maxRange - minRange) / binSize);
-      for (var i = 0; i < numBins; i++) {
+      var histogramData = [];
+      for (var bin = 0; bin < numBins; bin++) {
          histogramData.push({
-            x: minRange + (i + 0.5) * binSize,
+            x: minRange + (bin + 0.5) * binSize, // bin center
             y: 0
          });
-      }   
-      for (var i = 0; i < residuals.length; i++) {
-         var binIndex = Math.floor((residuals[i] - minRange) / binSize);
+      }
+      for (var resIdx = 0; resIdx < residuals.length; resIdx++) {
+         var binIndex = Math.floor((residuals[resIdx] - minRange) / binSize);
          if (binIndex >= 0 && binIndex < histogramData.length) {
             histogramData[binIndex].y++;
          }
@@ -38,8 +38,8 @@ Highcharts.ajax({
       // Generate normal distribution curve data
       var normalData = [];
       var totalCount = residuals.length;
-      for (var i = 0; i < 200; i++) {
-         var x = minRange + (i / 199) * (maxRange - minRange);
+      for (var n = 0; n < 200; n++) {
+         var x = minRange + (n / 199) * (maxRange - minRange);
          // Normal PDF
          var y = (1 / (stdDev * Math.sqrt(2 * Math.PI))) * Math.exp(-0.5 * Math.pow((x - mean) / stdDev, 2));
          // Scale to histogram frequency

@@ -33,7 +33,6 @@ export class Slider {
          this.valuePercentage = handleRelativeX / trackWidth;
          const newValue = this.minValue + (this.maxValue - this.minValue) * this.valuePercentage;
          newValueCallback(newValue);
-         console.log(this.valuePercentage, newValue);
       }
 
       window.addEventListener('resize', () => {

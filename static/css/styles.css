@@ -57,7 +57,7 @@ p {
 	line-height: 1.6em;
 	word-break: break-word;
 }
-
+ 
 * {
 	font-family: 'Labrada';
 	background-color: var(--background-color);
@@ -693,4 +693,10 @@ tr:nth-child(odd) td {
 @keyframes slideIn {
 	0% { transform: translateX(-40px); }
 	100% { transform: translateX(0px); }
+}
+
+/* Katex equations */
+
+.katex, .katex * { /* Prevent background color from affecting equation rendering*/
+    background-color: transparent !important;
 }
