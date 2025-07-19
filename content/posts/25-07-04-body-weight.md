@@ -26,8 +26,10 @@ $$ MSE = \sigma ^2 + \mu^2 $$
 
 $$ MSE = 0.35 ^2 + 0^2 = 0.1225 $$
 
-$$ MSE = \frac{0.35 kg}{\sqrt{d}}^{2} + (\frac{d}{2} * 0.07)^2 $$
+$$ MSE = \frac{0.35 kg}{\sqrt{d}}^{2} + (\frac{d}{2} * c_{deficit} * 0.00013)^2 $$
 
+{{< body_weight_article/mse_optimisation >}}
 
+{{< slider "Calorie Deficit (c_deficit)" "cdeficit_slider">}}
 
 # Whats the minimum calorie surpless/deficit to be certain after a week that you are actually gaining or loosing weight after 1 month?
