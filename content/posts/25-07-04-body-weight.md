@@ -32,4 +32,15 @@ $$ MSE = \frac{0.35 kg}{\sqrt{d}}^{2} + (\frac{d}{2} * c_{deficit} * 0.00013)^2 
 
 {{< slider "Calorie Deficit (c_deficit)" "cdeficit_slider">}}
 
+{{< range_slider_v2
+    id="cdeficit_slider_v2"
+    label="Calorie Deficit (c_deficit)"
+    min="-1000"
+    max="1000"
+    value="0"
+    step="10"
+    units="kcal"
+>}}
+
+
 # Whats the minimum calorie surpless/deficit to be certain after a week that you are actually gaining or loosing weight after 1 month?

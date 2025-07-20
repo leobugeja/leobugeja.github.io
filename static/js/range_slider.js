@@ -22,15 +22,20 @@ export class Slider {
 
       const moveHandle = (e) => {
          const { pageX } = e.touches ? e.touches[0] : e;
-         let handleRelativeX = pageX - this.track.offsetLeft - (this.handle.clientWidth / 2);
+         const handleHalfWidth = this.handle.clientWidth / 2;
+         let handleRelativeX = pageX - this.track.offsetLeft - handleHalfWidth;
     
          const trackWidth = this.getTrackWidth();
-         if (handleRelativeX < 0) handleRelativeX = 0;
-         if (handleRelativeX > trackWidth) handleRelativeX = trackWidth;
+         // Allow handle to overhang by half its width on both ends
+         if (handleRelativeX < -handleHalfWidth) handleRelativeX = -handleHalfWidth;
+         if (handleRelativeX > trackWidth - handleHalfWidth) handleRelativeX = trackWidth - handleHalfWidth;
 
          this.handle.style.left = handleRelativeX + 'px';
     
-         this.valuePercentage = handleRelativeX / trackWidth;
+         // Calculate value percentage based on the effective track range
+         const effectiveTrackWidth = trackWidth + this.handle.clientWidth;
+         const effectiveHandleX = handleRelativeX + handleHalfWidth;
+         this.valuePercentage = effectiveHandleX / effectiveTrackWidth;
          const newValue = this.minValue + (this.maxValue - this.minValue) * this.valuePercentage;
          newValueCallback(newValue);
       }
@@ -43,33 +48,51 @@ export class Slider {
     
       this.handle.addEventListener('mousedown', (e) => {
          this.isDragging = true;
+         this.track.style.cursor = 'grabbing';
+         this.handle.style.cursor = 'grabbing';
+         document.body.style.userSelect = 'none'; // prevent text selection while dragging
          moveHandle(e);
       });
       this.handle.addEventListener('touchstart', (e) => {
          this.isDragging = true;
+         this.track.style.cursor = 'grabbing';
+         this.handle.style.cursor = 'grabbing';
+         document.body.style.userSelect = 'none'; // prevent text selection while dragging
          moveHandle(e);
       });
       this.track.addEventListener('mousedown', (e) => {
          this.isDragging = true;
+         this.track.style.cursor = 'grabbing';
+         this.handle.style.cursor = 'grabbing';
+         document.body.style.userSelect = 'none'; // prevent text selection while dragging
          moveHandle(e);
       });
       this.track.addEventListener('touchstart', (e) => {
          this.isDragging = true;
+         this.track.style.cursor = 'grabbing';
+         this.handle.style.cursor = 'grabbing';
+         document.body.style.userSelect = 'none'; // prevent text selection while dragging
          moveHandle(e);
       });
     
     
-      window.addEventListener('mouseup', () => (this.isDragging = false));
-      window.addEventListener('touchend', () => (this.isDragging = false));
+      window.addEventListener('mouseup', () => {
+         this.isDragging = false;
+         this.track.style.cursor = '';
+         this.handle.style.cursor = '';
+      });
+      window.addEventListener('touchend', () => {
+         this.isDragging = false;
+         this.track.style.cursor = '';
+         this.handle.style.cursor = '';
+      });
     
     
       window.addEventListener('mousemove', (e) => {
          if (this.isDragging) {
-            document.body.style.cursor = 'pointer';
             document.body.style.userSelect = 'none'; // prevent text selection while dragging
             moveHandle(e);
          } else {
-            document.body.style.cursor = 'default';
             document.body.style.userSelect = 'auto';
          }
       });
@@ -83,6 +106,6 @@ export class Slider {
    }
 
    getTrackWidth() {
-      return this.track.offsetWidth - this.handle.clientWidth;
+      return this.track.offsetWidth;
    }
 }

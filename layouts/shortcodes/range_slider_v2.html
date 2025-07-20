@@ -1,0 +1,51 @@
+<label for="{{ .Get "id" | default "slider-v2" }}">
+  {{ .Get "label" | default "Value" }}:
+  <output id="{{ .Get "id" | default "slider-v2" }}-output">
+    {{ .Get "value" | default "50" }}{{ with .Get "units" }} {{ . }}{{ end }}
+  </output>
+</label>
+<div class="slider_track_v2">
+  <input
+    type="range"
+    class="slider_handle_v2"
+    id="{{ .Get "id" | default "slider-v2" }}"
+    name="{{ .Get "name" | default "slider-v2" }}"
+    min="{{ .Get "min" | default "0" }}"
+    max="{{ .Get "max" | default "100" }}"
+    value="{{ .Get "value" | default "50" }}"
+    step="{{ .Get "step" | default "1" }}"
+    {{ with .Get "units" }}data-units="{{ . }}"{{ end }}
+    oninput="this.parentElement.previousElementSibling.querySelector('output').value = this.value + (this.dataset.units ? ' ' + this.dataset.units : '')"
+  >
+</div> 
+<style>
+  .slider_track_v2 {
+    -webkit-tap-highlight-color: transparent;
+    max-width: 700px;
+    height: 5px;
+    background: var(--primary-grey);
+    margin: 20px max(50px, calc(50% - 350px));
+    border-radius: 4px;
+    position: relative;
+  }
+  
+  .slider_handle_v2 {
+    /* -webkit-appearance: none;  Override default CSS styles */
+    appearance: none;
+    width: 100%; /* Full-width */
+    height: 25px; /* Specified height */
+    background: transparent; /* Make handle transparent */
+    outline: none; /* Remove outline */
+    position: absolute;
+    top: -10px; /* Position handle on top of track */
+    left: 0;
+  }
+  
+  .slider_handle_v2:hover {
+    cursor: grab;
+  }
+  
+  .slider_handle_v2:active {
+    cursor: grabbing;
+  }
+</style>

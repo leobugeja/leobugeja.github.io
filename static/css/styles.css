@@ -611,7 +611,15 @@ tr:nth-child(odd) td {
 	background: var(--primary-grey);
 	margin: 20px max(50px, calc(50% - 350px));
 	border-radius: 4px;
-	cursor: pointer;
+	cursor: grab;
+}
+
+.slider_track:hover {
+	cursor: grab;
+}
+
+.slider_track:active {
+	cursor: grabbing;
 }
 
 .slider_handle {
@@ -622,7 +630,15 @@ tr:nth-child(odd) td {
 	position:relative;
 	top: -13px;
 	border-radius: 20px;
-	cursor: pointer
+	cursor: grab;
+}
+
+.slider_handle:hover {
+	cursor: grab;
+}
+
+.slider_handle:active {
+	cursor: grabbing;
 }
 
 .spring-mass-canvas {
