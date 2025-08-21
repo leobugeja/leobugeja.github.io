@@ -7,11 +7,13 @@ export class Slider {
 
       let slider_container = document.getElementById(containerId);
 
-      this.track = document.createElement('div');
-      this.track.classList.add('slider_track');
+      // this.track = document.createElement('div');
+      // this.track.classList.add('slider_track');
+      this.track = slider_container.querySelector('.slider_track');
 
-      this.handle = document.createElement('div');
-      this.handle.classList.add('slider_handle');
+      // this.handle = document.createElement('div');
+      // this.handle.classList.add('slider_handle');
+      this.handle = slider_container.querySelector('.slider_handle');
 
       this.track.appendChild(this.handle);
       slider_container.appendChild(this.track);

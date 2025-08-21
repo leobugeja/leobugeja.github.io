@@ -5,13 +5,11 @@ slug: spring-mass
 canvasThumbnail: "spring_mass_canvas_thumbnail.html"
 ---
 
-
-
 {{< spring_mass_canvas >}}
 
-{{< slider "Spring Stiffness" "stiffness_slider">}}
+<!-- {{< slider "Spring Stiffness" "stiffness_slider">}}
 
-{{< slider "Damping" "damping_slider">}}
+{{< slider "Damping" "damping_slider">}} -->
 
 
 ## Desription

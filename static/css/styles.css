@@ -603,44 +603,6 @@ tr:nth-child(odd) td {
     background-color:var(--primary-grey);
 }
 
-
-.slider_track {
-	-webkit-tap-highlight-color: transparent;
-	max-width: 700px;
-	height: 5px;
-	background: var(--primary-grey);
-	margin: 20px max(50px, calc(50% - 350px));
-	border-radius: 4px;
-	cursor: grab;
-}
-
-.slider_track:hover {
-	cursor: grab;
-}
-
-.slider_track:active {
-	cursor: grabbing;
-}
-
-.slider_handle {
-	width: 30px;
-	height: 30px;
-	background:
-	#acacac;
-	position:relative;
-	top: -13px;
-	border-radius: 20px;
-	cursor: grab;
-}
-
-.slider_handle:hover {
-	cursor: grab;
-}
-
-.slider_handle:active {
-	cursor: grabbing;
-}
-
 .spring-mass-canvas {
 	width: 100%;
     aspect-ratio: 8 / 7;

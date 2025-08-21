@@ -1,0 +1,181 @@
+<div id="{{ .id }}" class="ranger_slider_container">
+    <div class="slider_track">
+        <div class="slider_handle">
+            <div class="slider_tooltip" id="{{ .id }}_tooltip">0{{ if .units }}{{ .units }}{{ else }}%{{ end }}</div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .slider_track {
+        -webkit-tap-highlight-color: transparent;
+        max-width: 700px;
+        height: 5px;
+        background: var(--primary-grey);
+        margin: 20px max(50px, calc(50% - 350px));
+        border-radius: 4px;
+        cursor: grab;
+    }
+
+    .slider_track:hover {
+        cursor: grab;
+    }
+
+    .slider_track:active {
+        cursor: grabbing;
+    }
+
+    .slider_handle {
+        width: 30px;
+        height: 30px;
+        background: #acacac;
+        position: relative;
+        top: -13px;
+        border-radius: 20px;
+        cursor: grab;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .slider_handle:hover {
+        cursor: grab;
+    }
+
+    .slider_handle:active {
+        cursor: grabbing;
+    }
+
+    .slider_tooltip {
+        position: absolute;
+        top: -40px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #333;
+        color: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        white-space: nowrap;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        pointer-events: none;
+        z-index: 1000;
+    }
+
+    .slider_tooltip::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        border: 4px solid transparent;
+        border-top-color: #333;
+    }
+
+    .slider_handle:hover .slider_tooltip,
+    .slider_handle.touching .slider_tooltip {
+        opacity: 1;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const sliderContainer = document.getElementById('{{ .id }}');
+    const sliderTrack = sliderContainer.querySelector('.slider_track');
+    const sliderHandle = sliderContainer.querySelector('.slider_handle');
+    const tooltip = document.getElementById('{{ .id }}_tooltip');
+    
+    let isDragging = false;
+    let currentValue = 0;
+    const maxValue = 100; // Default max value, can be customized
+    
+    function updateTooltip(value) {
+        currentValue = value;
+        if ('{{ .units }}') {
+            tooltip.textContent = Math.round(value) + '{{ .units }}';
+        } else {
+            tooltip.textContent = Math.round(value) + '%';
+        }
+    }
+    
+    function updateHandlePosition(percent) {
+        const trackRect = sliderTrack.getBoundingClientRect();
+        const handleWidth = 30;
+        const maxLeft = trackRect.width - handleWidth;
+        const left = (percent / 100) * maxLeft;
+        sliderHandle.style.left = left + 'px';
+        updateTooltip(percent);
+    }
+    
+    function getValueFromPosition(clientX) {
+        const trackRect = sliderTrack.getBoundingClientRect();
+        const relativeX = clientX - trackRect.left;
+        const percent = Math.max(0, Math.min(100, (relativeX / trackRect.width) * 100));
+        return percent;
+    }
+    
+    function getValueFromTouchPosition(touchX) {
+        const trackRect = sliderTrack.getBoundingClientRect();
+        const relativeX = touchX - trackRect.left;
+        const percent = Math.max(0, Math.min(100, (relativeX / trackRect.width) * 100));
+        return percent;
+    }
+    
+    function handleMouseDown(e) {
+        e.preventDefault();
+        isDragging = true;
+        sliderTrack.style.cursor = 'grabbing';
+        sliderHandle.style.cursor = 'grabbing';
+        handleMouseMove(e);
+    }
+    
+    function handleMouseMove(e) {
+        if (!isDragging) return;
+        e.preventDefault();
+        const value = getValueFromPosition(e.clientX);
+        updateHandlePosition(value);
+    }
+    
+    function handleMouseUp() {
+        isDragging = false;
+        sliderTrack.style.cursor = 'grab';
+        sliderHandle.style.cursor = 'grab';
+    }
+    
+    function handleTouchStart(e) {
+        e.preventDefault();
+        isDragging = true;
+        sliderHandle.classList.add('touching');
+        const touch = e.touches[0];
+        const value = getValueFromTouchPosition(touch.clientX);
+        updateHandlePosition(value);
+    }
+    
+    function handleTouchMove(e) {
+        if (!isDragging) return;
+        e.preventDefault();
+        const touch = e.touches[0];
+        const value = getValueFromTouchPosition(touch.clientX);
+        updateHandlePosition(value);
+    }
+    
+    function handleTouchEnd(e) {
+        isDragging = false;
+        sliderHandle.classList.remove('touching');
+    }
+    
+    // Mouse event listeners
+    sliderTrack.addEventListener('mousedown', handleMouseDown);
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+    
+    // Touch event listeners
+    sliderTrack.addEventListener('touchstart', handleTouchStart, { passive: false });
+    document.addEventListener('touchmove', handleTouchMove, { passive: false });
+    document.addEventListener('touchend', handleTouchEnd);
+    
+    // Initialize position
+    updateHandlePosition(0);
+});
+</script>
